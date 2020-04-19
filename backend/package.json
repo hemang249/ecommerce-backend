@@ -4,7 +4,7 @@
   "description": "Backend for ecommerce application",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon -L index.js"
   },
   "author": "Hemang Bhogayata <hemang249@gmail.com>",
   "license": "UNLICENSED",
