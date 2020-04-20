@@ -5,5 +5,7 @@ const { isLoggedIn, isAuthenticated, isAdmin } = require("../controllers/auth");
 
 router.param("userId", getUserById);
 router.get("/:userId", isLoggedIn, isAuthenticated, getUser);
+router.put("/:userId", isLoggedIn, isAuthenticated, updateUser);
+router.get("/orders/:userId", isLoggedIn, isAuthenticated, getUserOrders);
 
 module.exports = router;
