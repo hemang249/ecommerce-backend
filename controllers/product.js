@@ -60,5 +60,55 @@ module.exports = {
     res.status(200).json(req.product);
   },
 
-  updateProduct: async (req, res) => {},
+  updateProduct: async (req, res) => {
+    const form = new fm.IncomingForm();
+    form.keepExtensions = true;
+
+    form.parse(req, async (err, fields, file) => {
+      if (err) {
+        res.status(400).json({ error: "Invalid file" });
+      }
+
+      const { price, name, description, category, stock } = fields;
+      const product = req.product;
+      product = _.extend(product, fields);
+      if (file.thumbnail) {
+        if (file.thumbnail.size > 3000000) {
+          res
+            .status(400)
+            .json({ error: "File size too large! File must not exceed 3mb" });
+        }
+        product.thumbnail.data = fs.readFileSync(file.thumbnail.path);
+        product.thumbnail.contentType = file.thumbnail.type;
+      }
+
+      await product.save();
+      res.status(200).json(product);
+    });
+  },
+
+  getAllProducts: async (req, res) => {
+    try {
+      const limit = req.query.limit ? parseInt(req.query.limit) : 8;
+      const sortBy = req.query.sortBy ? req.query.sortBy : "_id";
+      const products = await Product.find({})
+        .select("-thumbnail")
+        .populate("category")
+        .limit(limit)
+        .sort([[sortBy, "asc"]]);
+      res.status(200).json(products);
+    } catch (err) {
+      res.status(400).json({ error: "No Products exist" });
+    }
+  },
+
+  deleteProduct: async (req, res) => {
+    try {
+      const product = req.product;
+      await product.remove();
+      res.status(200);
+    } catch (err) {
+      res.status(400).json({ error: "Unable to delete product" });
+    }
+  },
 };
