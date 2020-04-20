@@ -6,4 +6,5 @@ module.exports = {
   PORT: parseInt(process.env.PORT),
   MONGOURI: process.env.MONGOURI,
   secret: process.env.SECRET,
+  HOST: process.env.HOST,
 };

@@ -62,7 +62,7 @@ module.exports = {
   }),
 
   isAuthenticated: async (req, res, next) => {
-    let checker = req.profile && req.auth && req.profile._id === req.auth._id;
+    let checker = req.profile && req.auth && req.profile._id == req.auth._id;
 
     if (!checker) {
       res.status(401).json({ error: "Unauthorised" });
