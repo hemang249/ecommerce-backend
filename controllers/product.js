@@ -111,4 +111,22 @@ module.exports = {
       res.status(400).json({ error: "Unable to delete product" });
     }
   },
+
+  updateStock: async (req, res, next) => {
+    try {
+      let operations = req.body.order.products.map((product) => {
+        return {
+          updateOne: {
+            filter: { _id: product._id },
+            update: { $inc: { stock: -product.count, sold: +product.count } },
+          },
+        };
+      });
+
+      const result = await Product.bulkWrite(operations, {});
+      res.status(200);
+    } catch (err) {
+      res.status(400).json({ error: "Bulk Operations Failed" });
+    }
+  },
 };
