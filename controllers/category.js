@@ -2,13 +2,13 @@ const Category = require("../models/category");
 
 module.exports = {
   getCategoryById: async (req, res, next, id) => {
-    Category.findById(id).exec((err, category) => {
-      if (err) {
-        res.status(404).json({ error: "Category doesnot exist" });
-      }
+    try {
+      const category = await Category.findOne({ _id: id });
       req.category = category;
-    });
-    next();
+      next();
+    } catch (err) {
+      res.status(400).json({ error: "No Such category exist" });
+    }
   },
 
   createCategory: async (req, res) => {
@@ -22,7 +22,7 @@ module.exports = {
   },
 
   getSingleCategory: async (req, res) => {
-    res.status(200).json({ ...req.category });
+    res.status(200).json(req.category);
   },
 
   getAllCategories: async (req, res, next) => {
@@ -34,14 +34,24 @@ module.exports = {
     }
   },
 
-  updateCategory: async (req, res, next) => {
+  updateCategory: async (req, res) => {
     try {
-      const category = req.catergory;
+      let category = req.category;
       category.name = req.body.name;
-      const updatedCategory = category.save();
+      const updatedCategory = await category.save();
       res.status(200).json(updatedCategory);
     } catch (err) {
       res.status(400).json({ error: "Update Failed" });
+    }
+  },
+
+  deleteSingleCategory: async (req, res) => {
+    try {
+      const catergory = req.category;
+      await Category.deleteOne({ _id: catergory._id });
+      res.status(200);
+    } catch (err) {
+      res.status(400).json({ error: "Unable to delete category" });
     }
   },
 };

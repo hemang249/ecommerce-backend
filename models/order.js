@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { ObjectId } = mongoose.Schema;
-
+require("./product-in-cart");
 const orderSchema = new mongoose.Schema(
   {
     products: [mongoose.model("ProductInCart").schema],
