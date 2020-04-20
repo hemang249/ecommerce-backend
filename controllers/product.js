@@ -23,7 +23,14 @@ module.exports = {
         res.status(400).json({ error: "Invalid file" });
       }
 
-      const product = new Product(fields);
+      const { price, name, description, category, stock } = fields;
+      const product = new Product({
+        name,
+        description,
+        price,
+        category,
+        stock,
+      });
 
       if (file.thumbnail) {
         if (file.thumbnail.size > 3000000) {
@@ -39,4 +46,19 @@ module.exports = {
       res.status(200).json(product);
     });
   },
+
+  getThumbnail: async (req, res, next) => {
+    if (req.product.thumbnail.data) {
+      res.set("Content-Type", req.product.thumbnail.contentType);
+      res.send(req.product.thumbnail.data);
+      next();
+    }
+  },
+
+  getSingleProduct: async (req, res) => {
+    req.product.thumbnail = undefined;
+    res.status(200).json(req.product);
+  },
+
+  updateProduct: async (req, res) => {},
 };
