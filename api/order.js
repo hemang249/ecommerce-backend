@@ -8,13 +8,6 @@ const { updateStock } = require("../controllers/product");
 router.param("userId", getUserById);
 router.param("orderId", getOrderById);
 
-router.post(
-  "/:userId",
-  isLoggedIn,
-  isAuthenticated,
-  addUserOrder,
-  updateStock,
-  createOrder
-);
+router.post("/", createOrder);
 
 module.exports = router;

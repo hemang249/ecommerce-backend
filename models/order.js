@@ -5,7 +5,9 @@ const orderSchema = new mongoose.Schema(
   {
     products: [mongoose.model("ProductInCart").schema],
 
-    transactionId: {},
+    transactionId: {
+      type: String,
+    },
 
     amount: {
       type: Number,
@@ -14,17 +16,7 @@ const orderSchema = new mongoose.Schema(
     },
 
     address: {
-      type: String,
-      required: true,
-    },
-
-    postalCode: {
-      type: Number,
-      required: true,
-    },
-
-    updated: {
-      type: Date,
+      type: Object,
     },
 
     user: {

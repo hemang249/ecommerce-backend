@@ -1,4 +1,5 @@
 const Order = require("../models/order");
+const uuid = require("uuid/v4");
 
 module.exports = {
   getOrderById: async (req, res, next, id) => {
@@ -17,10 +18,12 @@ module.exports = {
   createOrder: async (req, res) => {
     try {
       req.body.order.user = req.profile;
+      req.body.order.transactionId = uuid();
       const order = new Order(req.body.order);
       const newOrder = await order.save();
       res.status(200).json(newOrder);
     } catch (err) {
+      console.log(err);
       res.status(400).json({ error: "Error making the order" });
     }
   },
