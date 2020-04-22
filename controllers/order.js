@@ -1,4 +1,6 @@
 const Order = require("../models/order");
+const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema;
 const uuid = require("uuid/v4");
 
 module.exports = {
@@ -17,7 +19,7 @@ module.exports = {
 
   createOrder: async (req, res) => {
     try {
-      req.body.order.user = req.profile;
+      req.body.order.user = req.profile._id;
       req.body.order.transactionId = uuid();
       const order = new Order(req.body.order);
       const newOrder = await order.save();
@@ -25,6 +27,18 @@ module.exports = {
     } catch (err) {
       console.log(err);
       res.status(400).json({ error: "Error making the order" });
+    }
+  },
+
+  getAllOrders: async (req, res) => {
+    try {
+      console.log(req.profile);
+      const orders = await Order.find({ user: req.profile._id });
+      console.log(orders);
+      res.status(200).json({ orders });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({ error: "No Orders Exist" });
     }
   },
 };

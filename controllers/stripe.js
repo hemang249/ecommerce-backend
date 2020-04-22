@@ -7,7 +7,6 @@ module.exports = {
     try {
       const { token, amount } = req.body;
       const idempotencyKey = uuid();
-      console.log(token);
       return stripe.customers
         .create({ email: token.email, source: token.id })
         .then((customer) => {

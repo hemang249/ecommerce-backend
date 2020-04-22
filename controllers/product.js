@@ -5,7 +5,6 @@ const fs = require("fs");
 
 module.exports = {
   getProductById: async (req, res, next, id) => {
-    console.log("called");
     try {
       const product = await Product.findOne({ _id: id }).populate("category");
       req.product = product;
