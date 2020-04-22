@@ -4,6 +4,7 @@ const { isLoggedIn, isAdmin, isAuthenticated } = require("../controllers/auth");
 const { getUserById } = require("../controllers/user");
 const {
   getProductById,
+  getSingleProduct,
   createProduct,
   getThumbnail,
   updateProduct,
@@ -16,7 +17,7 @@ router.param("productId", getProductById);
 
 router.post("/:userId", isLoggedIn, isAuthenticated, isAdmin, createProduct);
 
-router.get("/:productId", getSingleProduct);
+router.get("/single/:productId", getSingleProduct);
 router.get("/thumbnail/:productId", getThumbnail);
 router.get("/all", getAllProducts);
 

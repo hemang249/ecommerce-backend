@@ -28,7 +28,7 @@ router.put(
 );
 
 router.delete(
-  "/:userId/:categoryId",
+  "/:categoryId/:userId",
   isLoggedIn,
   isAuthenticated,
   isAdmin,

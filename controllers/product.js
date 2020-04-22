@@ -5,11 +5,13 @@ const fs = require("fs");
 
 module.exports = {
   getProductById: async (req, res, next, id) => {
+    console.log("called");
     try {
       const product = await Product.findOne({ _id: id }).populate("category");
       req.product = product;
       next();
     } catch (err) {
+      console.log(err);
       res.status(400).json({ error: "No Such product exists !" });
     }
   },
@@ -89,15 +91,13 @@ module.exports = {
 
   getAllProducts: async (req, res) => {
     try {
-      const limit = req.query.limit ? parseInt(req.query.limit) : 8;
-      const sortBy = req.query.sortBy ? req.query.sortBy : "_id";
       const products = await Product.find({})
         .select("-thumbnail")
-        .populate("category")
-        .limit(limit)
-        .sort([[sortBy, "asc"]]);
+        .populate("category");
+
       res.status(200).json(products);
     } catch (err) {
+      console.log(err);
       res.status(400).json({ error: "No Products exist" });
     }
   },
