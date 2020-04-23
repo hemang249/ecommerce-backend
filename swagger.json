@@ -1,0 +1,574 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1",
+    "title": "ecommerce-backend"
+  },
+  "host": "localhost:8080",
+  "basePath": "/api/v1",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "securityDefinitions": {
+    "Token": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "Token": []
+    }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "description": "Register New User",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/registerRequestBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/error400Body"
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "description": "Login User",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/loginRequestBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/userResponse"
+            }
+          }
+        }
+      }
+    },
+    "/category/:userId": {
+      "post": {
+        "description": "create a new category",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/categoryBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/categoryResponseBody"
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "schema": {
+              "$ref": "#/definitions/error401Body"
+            }
+          }
+        }
+      }
+    },
+    "/category/single/:categoryId": {
+      "get": {
+        "description": "get a single category",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/categoryResponseBody"
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "schema": {
+              "$ref": "#/definitions/error404Body"
+            }
+          }
+        }
+      }
+    },
+    "/category/all": {
+      "get": {
+        "description": "get all categories",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/categoriesResponseBody"
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "schema": {
+              "$ref": "#/definitions/error404Body"
+            }
+          }
+        }
+      }
+    },
+    "/category/:categoryId/:userId": {
+      "put": {
+        "description": "update a category",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/categoryBody"
+            }
+          },
+          "400": {
+            "description": "Update failed",
+            "schema": {
+              "$ref": "#/definitions/error400Body"
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "schema": {
+              "$ref": "#/definitions/error401Body"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "delete a category",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Update failed",
+            "schema": {
+              "$ref": "#/definitions/error400Body"
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "schema": {
+              "$ref": "#/definitions/error401Body"
+            }
+          }
+        }
+      }
+    },
+    "/product/:userId": {
+      "post": {
+        "description": "create a product",
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "thumbnail",
+            "in": "formData",
+            "type": "file",
+            "description": "product thumbnail"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "type": "string",
+            "description": "product name"
+          },
+          {
+            "name": "stock",
+            "in": "formData",
+            "type": "number",
+            "description": "product stock"
+          },
+          {
+            "name": "price",
+            "in": "formData",
+            "type": "number",
+            "description": "product price"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "type": "string",
+            "description": "product description"
+          },
+          {
+            "name": "category",
+            "in": "formData",
+            "type": "string",
+            "description": "product category id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/productResponseBody"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/error400Body"
+            }
+          }
+        }
+      }
+    },
+    "/product/all": {
+      "get": {
+        "description": "get all products",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/productsResponseBody"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/error404Body"
+            }
+          }
+        }
+      }
+    },
+    "/product/:productId/:userId": {
+      "delete": {
+        "description": "delete a  product",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "delete failed",
+            "schema": {
+              "$ref": "#/definitions/error404Body"
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "schema": {
+              "$ref": "#/definitions/error401Body"
+            }
+          }
+        }
+      }
+    },
+    "/order/:userId": {
+      "post": {
+        "description": "create a order",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/orderBody"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/orderResponse"
+            }
+          },
+          "400": {
+            "description": "order creation failed",
+            "schema": {
+              "$ref": "#/definitions/error400Body"
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "schema": {
+              "$ref": "#/definitions/error401Body"
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "get all order of user",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/ordersResponse"
+            }
+          },
+          "400": {
+            "description": "Update failed",
+            "schema": {
+              "$ref": "#/definitions/error400Body"
+            }
+          },
+          "401": {
+            "description": "Unauthorised",
+            "schema": {
+              "$ref": "#/definitions/error401Body"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "registerRequestBody": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "user@example.com"
+        },
+        "firstName": {
+          "type": "string",
+          "example": "John"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345"
+        }
+      }
+    },
+    "loginRequestBody": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "user@example.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345"
+        }
+      }
+    },
+    "userResponse": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "507f1f77bcf86cd799439011"
+        },
+        "email": {
+          "type": "string",
+          "example": "user@example.com"
+        },
+        "firstName": {
+          "type": "string",
+          "example": "John"
+        },
+        "lastName": {
+          "type": "string",
+          "example": "Doe"
+        },
+        "role": {
+          "type": "number",
+          "example": 0
+        }
+      }
+    },
+    "categoryResponseBody": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "507f1f77bcf86cd799439011"
+        },
+        "name": {
+          "type": "string",
+          "example": "Summer"
+        },
+        "createdAt": {
+          "type": "string",
+          "example": "2020-09-24T10:20:20"
+        },
+        "updatedAt": {
+          "type": "string",
+          "example": "2020-09-24T10:20:20"
+        }
+      }
+    },
+    "categoryBody": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Summer"
+        }
+      }
+    },
+    "productResponseBody": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string",
+          "example": "5023dsf3bcf86cd79943011"
+        },
+        "name": {
+          "type": "string",
+          "example": "Tshirt"
+        },
+        "description": {
+          "type": "string",
+          "example": "It is amazing"
+        },
+        "price": {
+          "type": "number",
+          "example": 40
+        },
+        "stock": {
+          "type": "number",
+          "example": 20
+        },
+        "category": {
+          "type": "string",
+          "example": "507f1f77bcf86cd799439011"
+        }
+      }
+    },
+    "productsResponseBody": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/productResponseBody"
+          }
+        }
+      }
+    },
+    "categoriesResponseBody": {
+      "type": "object",
+      "properties": {
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/categoryResponseBody"
+          }
+        }
+      }
+    },
+    "orderBody": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "example": 50
+        },
+        "user": {
+          "type": "string",
+          "example": "507f1f77bcf86cd799439011"
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/productInCardBody"
+          }
+        }
+      }
+    },
+    "orderResponse": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "example": 50
+        },
+        "user": {
+          "type": "string",
+          "example": "507f1f77bcf86cd799439011"
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/productInCardBody"
+          }
+        },
+        "_id": {
+          "type": "string",
+          "example": "507f1f77bcf86cd799439011"
+        }
+      }
+    },
+    "ordersResponse": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/orderResponse"
+      }
+    },
+    "productInCardBody": {
+      "type": "object",
+      "properties": {
+        "productId": {
+          "type": "string",
+          "example": "507f1f77bcf86cd799439011"
+        },
+        "name": {
+          "type": "string",
+          "example": "Tshirt"
+        },
+        "count": {
+          "type": "number",
+          "example": 5
+        }
+      }
+    },
+    "error400Body": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Some error occured please try again"
+        }
+      }
+    },
+    "error401Body": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "Unauthorised"
+        }
+      }
+    },
+    "error404Body": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "type": "string",
+          "example": "No Such resource was found"
+        }
+      }
+    }
+  }
+}
